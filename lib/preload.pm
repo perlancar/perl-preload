@@ -6,19 +6,22 @@ package preload;
 use 5.014;
 use strict;
 use warnings;
-#use load;
 
 use constant PRELOAD => $ENV{PRELOAD};
 
 use Keyword::API;
 
 sub import {
-    my ($class, %params) = @_;
+    no strict 'refs';
 
-    my $name = %params && $params{-as} ? $params{-as} : "preload";
+    my $class = shift;
 
-    install_keyword(__PACKAGE__, $name);
-    #load->import;
+    install_keyword(__PACKAGE__, 'load');
+
+    # XXX can't install_keyword() twice? so currently we cheat and make preload
+    # as just an "alias" to require
+    my $caller = caller();
+    *{"$caller\::preload"} = sub { my $mod_pm = shift; $mod_pm =~ s!::!/!g; $mod_pm .= ".pm"; require $mod_pm };
 }
 
 sub unimport { uninstall_keyword() }
@@ -26,11 +29,11 @@ sub unimport { uninstall_keyword() }
 sub parser {
     lex_read_space(0);
     my $module = lex_unstuff_to_ws();
-    lex_stuff("if (PRELOAD) { require $module }");
+    lex_stuff("unless (preload::PRELOAD) { require $module }");
 };
 
 1;
-# ABSTRACT: Load modules when PRELOAD
+# ABSTRACT: Load and preload modules
 
 =head1 SYNOPSIS
 

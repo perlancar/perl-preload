@@ -35,6 +35,8 @@ sub parser {
 1;
 # ABSTRACT: Load and preload modules
 
+=for Pod::Coverage .+
+
 =head1 SYNOPSIS
 
  use preload;
@@ -83,5 +85,7 @@ loading.
 =head1 SEE ALSO
 
 L<prefork>
+
+L<Dist::Zilla::Plugin::Preload>
 
 =cut

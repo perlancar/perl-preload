@@ -1,3 +1,9 @@
+0.020   2019-03-19 (PERLANCAR)
+
+	- [Incompatible change] Observe environment PERL_PRELOAD_MODULES
+	  instead of PRELOAD.
+
+
 0.01     2015-03-24 (PERLANCAR)
 
          - First release.

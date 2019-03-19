@@ -7,7 +7,7 @@ use 5.014;
 use strict;
 use warnings;
 
-use constant PRELOAD => $ENV{PRELOAD};
+use constant PRELOAD => $ENV{PERL_PRELOAD};
 
 use Keyword::API;
 
@@ -41,11 +41,11 @@ sub parser {
 
  use preload;
 
- # Foo::Bar will be require'd when $ENV{PRELOAD} is true
+ # Foo::Bar will be require'd when $ENV{PERL_PRELOAD_MODULES} is true
  preload Foo::Bar;
 
  sub mysub {
-     # Foo::Bar will be require'd when $ENV{PRELOAD} is false
+     # Foo::Bar will be require'd when $ENV{PERL_PRELOAD_MODULES} is false
      load Foo::Bar;
  }
 
@@ -66,8 +66,9 @@ This pragma module tries to offer the best of both worlds. This statement:
 
  use preload;
 
-will declare a constant C<PRELOAD> (currently set to C<$ENV{PRELOAD}>) and
-introduce two new keywords: C<preload> and C<load>. C<preload> is defined to be:
+will declare a constant C<PRELOAD> (currently set to
+C<$ENV{PERL_PRELOAD_MODULES}>) and introduce two new keywords: C<preload> and
+C<load>. C<preload> is defined to be:
 
  if (PRELOAD) { require $module }
 
@@ -80,6 +81,13 @@ this means it will become a no-op when PRELOAD is true.
 
 With this module you can avoid run-time penalty associated with conditional
 loading.
+
+
+=head1 ENVIRONMENT
+
+=head2 PERL_PRELOAD_MODULES
+
+Boolean.
 
 
 =head1 SEE ALSO
